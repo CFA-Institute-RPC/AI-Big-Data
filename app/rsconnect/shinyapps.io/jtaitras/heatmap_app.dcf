@@ -1,0 +1,12 @@
+name: heatmap_app
+title:
+username: jtaitras
+account: jtaitras
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13656189
+bundleId: 9626265
+url: https://jtaitras.shinyapps.io/heatmap_app/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
