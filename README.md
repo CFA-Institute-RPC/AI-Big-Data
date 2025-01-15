@@ -20,7 +20,7 @@ The heatmap is based on data collected between February and April 2024, detailin
 - Key use cases in risk oversight, portfolio management, and advisory workflows.
 - Trends and patterns in technology integration by industry professionals.
 
-Visit the live heatmap to explore these insights: [**AI and Big Data Technology Usage Heatmap**](https://cfa-institute-rpc.github.io/AI-Big-Data/).
+Visit the live heatmap to explore these insights: [**AI and Big Data Technology Usage Heatmap**](https://cfa-institute-rpc.github.io/AI-finance-workflow-heatmap/).
 
 ---
 
@@ -29,7 +29,7 @@ Visit the live heatmap to explore these insights: [**AI and Big Data Technology 
 ### View the Heatmap
 The interactive heatmap is hosted online for easy access. Simply visit the following link:
 
-[**AI and Big Data Technology Usage Heatmap**](https://cfa-institute-rpc.github.io/AI-Big-Data/)
+[**AI and Big Data Technology Usage Heatmap**](https://cfa-institute-rpc.github.io/AI-finance-workflow-heatmap/)
 
 ---
 
@@ -37,7 +37,7 @@ The interactive heatmap is hosted online for easy access. Simply visit the follo
 
 We value your insights! Share your thoughts and ideas to shape future enhancements to this project:
 
-- **GitHub Discussions**: [Start a conversation](https://github.com/CFA-Institute-RPC/AI-Big-Data/discussions) about the survey findings or heatmap functionality.
+- **GitHub Discussions**: [Start a conversation](https://github.com/CFA-Institute-RPC/AI-finance-workflow-heatmap/discussions) about the survey findings or heatmap functionality.
 - **Discord**: [Join our community server](https://discord.com/invite/zaHvJGSC) to collaborate and network with peers.
 
 Let us know how AI and big data technologies are transforming your workflows, or suggest additional features for future iterations of the heatmap.
