@@ -1,6 +1,6 @@
 # AI and Big Data Technology Usage Heatmap
 
-The **AI and Big Data Technology Usage Heatmap** repository is a resource developed by the [CFA Institute Research & Policy Center (RPC)](https://rpc.cfainstitute.org/) to showcase insights from a 2024 survey on the adoption of AI and big data technologies in the investment industry. This project provides an interactive visualization of how professionals leverage these technologies in workflows such as risk oversight, advisory, and investment decision-making.
+The **AI and Big Data Technology Usage Heatmap** repository is a resource developed by the [CFA Institute Research & Policy Center (RPC)](https://rpc.cfainstitute.org/) to showcase insights from a 2024 survey on the adoption of AI and big data technologies in the investment industry. The full research report can be found [here](https://rpc.cfainstitute.org/research/reports/2025/creating-value-from-big-data-in-the-investment-management-process). This project provides an interactive visualization of how professionals leverage these technologies in workflows such as risk oversight, advisory, and investment decision-making. 
 
 ---
 
