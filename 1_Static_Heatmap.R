@@ -75,6 +75,17 @@ for (i in 1:length(job_category_list)) {
   heatmap_data[[i]] <- data_transform(df)
 }
 
+# Retain n= for each question within each job category
+n_counts <- list()
+for (data in 1:length(heatmap_data)) {
+  temp <- heatmap_data[[data]]
+  temp <- temp %>%  
+    select(c('Question Description','total_answered_this_question')) %>%
+    filter(`Question Description`!= "None of the above") %>% #drop 'none of the above' answer
+    distinct()
+  n_counts[[data]] <- temp
+}
+
 #function to pivot wide data (columns = platform, rows = questions)
 pivot_data <- function(df) {
 df %>%
@@ -92,73 +103,111 @@ heatmap_data <- lapply(heatmap_data,pivot_data)
 
 #To plot heatmaps next to each other as a list, each heatmap needs to have the same number of rows & columns
 lapply(heatmap_data,dim)
-#heatmap 1 has 21 questions, heatmap 2 has 20, heatmap 7 has 19... they need to be uniform
+#heatmap 1 has 20 questions, heatmap 5 has 19, heatmap 6 has 18... they need to be uniform
 
-questions <- unique(as.character(heatmap_data[[1]]$`Question Description`))
+#questions <- unique(as.character(heatmap_data[[1]]$`Question Description`))
 
-for (i in 1:length(heatmap_data)) { #Iterate through each heatmap in list 
-  for (question in 1:length(questions)) { #Iterate through each question
-    if (questions[question] %in% as.character(heatmap_data[[i]]$`Question Description`)) { 
-      next } #If question is in QD column - skip to next question, otherwise add new row to dataframe with that question
-    else {
-      heatmap_data[[i]] <- add_row(heatmap_data[[i]],`Question Description`= questions[question],`Excel platform`=0,
-              `Gen AI`=0,`Market databases`=0,`Other`=0,`Other programming languages`=0,
-              `Other visualization technologies`=0,`Python platform`=0,`SQL`=0) }
-  }
-  heatmap_data[[i]] <- heatmap_data[[i]] %>%
-    arrange(`Question Description`)  #arrange rows alphabetically for consistent ordering
+#for (i in 1:length(heatmap_data)) { #Iterate through each heatmap in list 
+ # for (question in 1:length(questions)) { #Iterate through each question
+  #  if (questions[question] %in% as.character(heatmap_data[[i]]$`Question Description`)) { 
+   #   next } #If question is in QD column - skip to next question, otherwise add new row to dataframe with that question
+  #  else {
+   #   heatmap_data[[i]] <- add_row(heatmap_data[[i]],`Question Description`= questions[question],`Excel platform`=0,
+    #          `Gen AI`=0,`Market databases`=0,`Other`=0,`Other programming languages`=0,
+     #         `Other visualization technologies`=0,`Python platform`=0,`SQL`=0) }
+  #}
+  #heatmap_data[[i]] <- heatmap_data[[i]] %>%
+   # arrange(`Question Description`)  #arrange rows alphabetically for consistent ordering
     
-  heatmap_data[[i]]$`Question Description` <- as.factor(heatmap_data[[i]]$`Question Description`) # convert back to factor column
-  }
+  #heatmap_data[[i]]$`Question Description` <- as.factor(heatmap_data[[i]]$`Question Description`) # convert back to factor column
+#}
 
-lapply(heatmap_data,dim)
+# Verify code worked 
+#lapply(heatmap_data,dim)
+
+# Apply same code to n_counts
+#for (i in 1:length(n_counts)) { 
+ # for (question in 1:length(questions)) { #Iterate through each question
+  #  if (questions[question] %in% as.character(n_counts[[i]]$`Question Description`)) { 
+   #   next } #If question is in QD column - skip to next question, otherwise add new row to dataframe with that question
+   # else {
+    #  n_counts[[i]] <- add_row(n_counts[[i]],`Question Description`= questions[question],
+     #                          `total_answered_this_question`=0) }
+ # }
+#  n_counts[[i]] <- n_counts[[i]] %>%
+  #  arrange(`Question Description`)  #arrange rows alphabetically for consistent ordering
+  #n_counts[[i]]$`Question Description` <- as.factor(n_counts[[i]]$`Question Description`) # convert back to factor column
+#}
+#Verify code worked
+#lapply(n_counts,dim)
 
 #We also need to make sure the rownames of each dataframe are in the same order - sort alphabetically.
 
 #Assign row names and remove redundant columns
 heatmap_data <- lapply(heatmap_data, function(df) {
-  rownames <- df$`Question Description`  # Extract row names
-  df <- as.matrix(df[, -which(names(df) == "Question Description")])  # Convert to matrix, excluding the column
-  rownames(df) <- rownames  # Set row names for the matrix
+  rownames <- df$`Question Description`  #Extract row names
+  df <- as.matrix(df[, -which(names(df) == "Question Description")])  #Convert to matrix, excluding the column
+  rownames(df) <- rownames  #Set row names for the matrix
   return(df)
 })
 
 #Label dataframes
 names(heatmap_data) <- names(job_category_list)
+names(n_counts) <- names(job_category_list)
 
 #Create gradient of heatmap colours starting from antiquewhite (0%) to darkorchid1 (100%)
 heatmap_colours <- colorRamp2(c(0,100),c("lightblue","#002F6C"))
 
-#heatmap 1 - deepskyblue, dodgerblue4
-#heatmap 2 - lightblue1, darkblue
-#heatmap 3 - lightblue, dodgerblue4
-#heatmap 4 - lightblue, royalblue4
-#heatmap 5 - lightblue, slateblue4
-#heatmap 6 - lightblue, steelblue4
-#heatmap 7 - lightblue, #002F6C
-#heatmap 8 - skyblue2, #002F6C
-#heatmap 9 - skyblue1, #002F6C
+counts_list <- list()
+for (i in 1:length(n_counts)) {
+  temp <- n_counts[[i]]
+  counts_vec <- paste0("n=",as.character(temp$total_answered_this_question))
+  counts_list[[i]] <- counts_vec
+}
+
+names(counts_list) <- names(n_counts)
+
+n_annotations <- list()
+
+for (i in 1:length(counts_list)) {
+  temp <- rowAnnotation(
+    `Total Answered` = anno_text(counts_list[[i]],
+                                 gp = gpar(fontsize = 10, col = "black"))
+  )
+  n_annotations[[i]] <- temp
+}
+
+names(n_annotations) <- names(n_counts)
+
 #Create example heatmap
-Heatmap(heatmap_data[['Advisory']],name="Percentage",col=heatmap_colours,
+advisory_heatmap <- Heatmap(heatmap_data[['Advisory']],name="Percentage",col=heatmap_colours,
         column_title='Advisory',
-        column_title_gp=gpar(fontsize=20,fontface="bold"), # create column title
-        border_gp = gpar(col = "black", lty = 1), # set heatmap border
-        rect_gp = gpar(col = "black", lwd = 1), # set cell borders
-        show_row_dend=FALSE, 
+        column_title_gp=gpar(fontsize=20,fontface="bold"), #create column title
+        border_gp = gpar(col = "black", lty = 1), #set heatmap border
+        rect_gp = gpar(col = "black", lwd = 1), #set cell borders
+        show_row_dend=FALSE, #remove col/row dendograms
         show_column_dend=FALSE,
         row_names_side = "left",column_names_side="top",
         cell_fun = function(j, i, x, y, width, height, fill) {
           grid.text(sprintf("%.0f", heatmap_data[['Advisory']][i, j]), x, y, gp = gpar(fontsize = 10,
                                                                                        col="white")) #Add % values to cells
-        },row_names_gp=gpar(fontsize=10),column_names_gp=gpar(fontsize=10)) 
-        
+        },row_names_gp=gpar(fontsize=10),column_names_gp=gpar(fontsize=10),
+        right_annotation = n_annotations[[1]]) #add sample size 
+
+advisory_heatmap = draw(advisory_heatmap) #Speeds up heatmap creation
+
+
 #Initialise list to store heatmaps for each job category
 heatmap_list <- list()
 
-create_heatmap <- function(df_name,heatmap_colours){
+create_heatmap <- function(df_name,heatmap_colours,annotation){
   
   data <- heatmap_data[[df_name]]
+  data_annotation <- n_annotations[[annotation]]
   
+  counts <- n_counts[[df_name]]
+  
+  #Create Heatmaps
   Heatmap(data,name="Percentage",col=heatmap_colours,
           column_title=df_name,
           column_title_gp=gpar(fontsize=20,fontface="bold"), #create column title
@@ -174,14 +223,15 @@ create_heatmap <- function(df_name,heatmap_colours){
           ),
           cell_fun = function(j, i, x, y, width, height, fill) {
             grid.text(sprintf("%.0f", data[i, j]), x, y, gp = gpar(fontsize = 12,col='white')) #add % values to cells
-          },row_names_gp=gpar(fontsize=12),column_names_gp=gpar(fontsize=12)) 
+          },row_names_gp=gpar(fontsize=12),column_names_gp=gpar(fontsize=12),
+          right_annotation = data_annotation) 
 }
 
 df_names <- names(heatmap_data)
 
 #Loop through each dataframe name, create heatmap, and store in the list
 for (df_name in df_names) {
-  heatmap_list[[df_name]] <- create_heatmap(df_name, heatmap_colours)
+  heatmap_list[[df_name]] <- create_heatmap(df_name, heatmap_colours,annotation=df_name)
 }
 
 #Save heatmaps
