@@ -21,8 +21,9 @@ ui <- fluidPage(
         inputId = "jobCategory",
         label = "Select Job Category:",
         choices = names(heatmap_list),
-        selected = "Advisory"
-      )
+        selected = "Advisory"),
+      
+      helpText("Note: Some workflows may be missing in certain heatmaps as there is no data for them (n=0).")
     ),
     mainPanel(
       width = 10,
