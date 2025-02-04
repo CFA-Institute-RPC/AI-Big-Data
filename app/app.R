@@ -12,8 +12,9 @@ heatmap_list <- readRDS("heatmap_list.rds")
 
 #create user interface 
 ui <- fluidPage(
-  titlePanel("Percentage technology use across workflows"),
-  
+  # Title
+  titlePanel("Workflow heatmap"),
+  # Sidebar layout - encodes selection panel 
   sidebarLayout(
     sidebarPanel(
       width = 2,  # narrower sidebar
@@ -23,7 +24,32 @@ ui <- fluidPage(
         choices = names(heatmap_list),
         selected = "Advisory"),
       
-      helpText("Note: Some workflows may be missing in certain heatmaps as there is no data for them (n=0).")
+      # Adds additional information in sidebar
+      helpText("Note: Some workflows may be missing in certain heatmaps as there is no data for them (n=0)."),
+      
+      
+      tags$hr(),  # Horizontal line for separation
+      h4("Further Information"),
+      p("This heatmap visualizes how AI and big data technologies are used for different workflows across job categories.
+        The data is derived from a survey conducted by The CFA Institute between February and April 2024.
+         "),
+      
+      # Links Section
+      tags$hr(),
+      h4("Useful Links"),
+      tags$ul(
+        tags$li("For questions and discussion, please visit our ",
+                tags$a(href = "https://github.com/CFA-Institute-RPC/AI-finance-workflow-heatmap/discussions", 
+                       target = "_blank", "GitHub Discussion Page.")),
+        
+        tags$li("Interested in the source code? Check out our ",
+                tags$a(href = "https://github.com/CFA-Institute-RPC/AI-finance-workflow-heatmap", 
+                       target = "_blank", "GitHub repository.")),
+        
+        tags$li("For more details on the content, see the original article ",
+                tags$a(href = "https://rpc.cfainstitute.org/research/reports/2025/creating-value-from-big-data-in-the-investment-management-process", 
+                       target = "_blank", "here."))
+      )
     ),
     mainPanel(
       width = 10,
